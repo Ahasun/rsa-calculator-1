@@ -6,6 +6,7 @@
     <title>RSA Calculator</title>
   </head>
   <body>
+    <noscript>This program will not work without javascript!</noscript>
     <header>
       <h2>RSA Calculator</h2>
       <p>
@@ -15,34 +16,43 @@
     </header>
     <main>
       <div>
-        <form action="#" onsubmit="">
+        <form action="#" onsubmit="savePQ(event)">
           <fieldset>
             <legend>Enter two prime numbers, <em>P</em> and <em>Q</em></legend>
             <label for="p-value">P</label>
             <input type="number" id="p-value" name="pvalue" required />
-            <small style="color: red">Choose a prime number.</small><br /><br />
+            <small style="color: red" id="p-not-prime-text"
+              >Choose a prime number.</small
+            ><br /><br />
             <label for="q-value">Q</label>
             <input type="number" id="q-value" name="qvalue" required />
-            <small style="color: red">Choose a prime number.</small><br /><br />
+            <small style="color: red" id="q-not-prime-text"
+              >Choose a prime number.</small
+            ><br /><br />
             <button class="btn btn-primary" type="submit">Save</button>
           </fieldset>
         </form>
       </div>
       <div>
-        <p>Calculating the value of <em>n</em>: <strong>0</strong></p>
-        <p>Calculating the value of <em>&phi;(n)</em>: <strong>0</strong></p>
+        <p>
+          Calculating the value of <em>n</em>: <strong id="n-value"></strong>
+        </p>
+        <p>
+          Calculating the value of <em>&phi;(n)</em>:
+          <strong id="phi-value"></strong>
+        </p>
       </div>
       <div>
         <p>
           Choose the value of <em>e</em> from the following array:
-          <strong>[0, 1, 2, 3, ...]</strong>
+          <strong id="e-array-value"></strong>
         </p>
-        <form action="#" onsubmit="">
+        <form action="#" onsubmit="saveE(event)">
           <fieldset>
             <legend>Choose the value of <em>e</em></legend>
             <label for="fname">e: </label>
             <input type="number" id="e-value" name="evalue" required />
-            <small style="color: red"
+            <small style="color: red" id="e-not-in-array-text"
               >Choose a number from the array defined above.</small
             >
             <br /><br />
@@ -51,55 +61,59 @@
         </form>
       </div>
       <div>
-        <p>Calculating the value of <em>d</em>: <strong>0</strong></p>
-        <p>So the public key is: <strong>(0, 0)</strong></p>
-        <p>And the private key is: <strong>(0, 0)</strong></p>
+        <p>
+          Calculating the value of <em>d</em>: <strong id="d-value"></strong>
+        </p>
+        <p>So the public key is: <strong id="public-key-value"></strong></p>
+        <p>And the private key is: <strong id="private-key-value"></strong></p>
       </div>
       <div>
-        <form action="#" onsubmit="">
+        <form action="#" onsubmit="generateCipherFromMessage(event)">
           <fieldset>
             <legend>Encryption</legend>
-            <textarea
+            <input
+              type="number"
               name="message"
               id="message"
-              cols="40"
-              rows="10"
-              placeholder="Enter a message"
+              style="min-width: 340px"
+              min="0"
+              placeholder="Enter a message (in numeric form) which is less than n"
               required
-            ></textarea>
-            <textarea
+            />
+            <br /><br />
+            <input
               name="converted_cypher"
               id="converted-cypher"
-              cols="40"
-              rows="10"
-              placeholder="Converted cypher text"
+              style="min-width: 340px"
+              placeholder="Generated cypher text (in numeric form)"
               readonly
-            ></textarea>
+            />
             <br /><br />
             <button type="submit">Save</button>
           </fieldset>
         </form>
       </div>
       <div>
-        <form action="#" onsubmit="">
+        <form action="#" onsubmit="generateMessageFromCypher(event)">
           <fieldset>
             <legend>Decryption</legend>
-            <textarea
+            <input
+              type="number"
               name="cypher"
               id="cypher"
-              cols="40"
-              rows="10"
-              placeholder="Enter a cypher text"
+              style="min-width: 340px"
+              min="0"
+              placeholder="Enter a cypher text (in numeric form) which is less than n"
               required
-            ></textarea>
-            <textarea
+            />
+            <br /><br />
+            <input
               name="converted_message"
               id="converted-message"
-              cols="40"
-              rows="10"
-              placeholder="Converted message"
+              style="min-width: 340px"
+              placeholder="Generated message from the cypher text (in numeric form)"
               readonly
-            ></textarea>
+            />
             <br /><br />
             <button type="submit">Save</button>
           </fieldset>
