@@ -1,0 +1,11 @@
+.navbar {
+  flex-grow: 1;
+}
+
+.navbar__icon {
+  margin-right: 16px;
+}
+
+.navbar__title {
+  flex-grow: 1;
+}

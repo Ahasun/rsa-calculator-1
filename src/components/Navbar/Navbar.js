@@ -1,12 +1,33 @@
 import React from "react";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import Button from "@material-ui/core/Button";
+
+import "./Navbar.css";
 
 function Navbar() {
   return (
-    <nav className="navbar">
-      <div className="navbar__brand">
-        <h2>RSA Algorithm</h2>
-      </div>
-    </nav>
+    <div className="navbar">
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className="navbar__icon"
+            color="inherit"
+            aria-label="menu"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className="navbar__title">
+            RSA Calculator
+          </Typography>
+          <Button color="inherit">Reset</Button>
+        </Toolbar>
+      </AppBar>
+    </div>
   );
 }
 
