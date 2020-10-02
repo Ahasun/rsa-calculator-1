@@ -10,6 +10,8 @@ export const initialState = {
   phi: "0",
   e: "0",
   d: "0",
+  cipher: "",
+  message: "",
   errorbag: [],
 };
 
@@ -24,6 +26,32 @@ const power = (a, b, n) => {
   }
   return res;
 };
+
+function modInverse(a, m) {
+  [a, m] = [BigInt(a), BigInt(m)];
+
+  a = ((a % m) + m) % m;
+  if (!a || m < BigInt(2)) {
+    return NaN; // invalid input
+  }
+  // find the gcd
+  const s = [];
+  let b = m;
+  while (b) {
+    [a, b] = [b, a % b];
+    s.push({ a, b });
+  }
+  if (a !== BigInt(1)) {
+    return NaN; // inverse does not exists
+  }
+  // find the inverse
+  let x = BigInt(1);
+  let y = BigInt(0);
+  for (let i = s.length - 2; i >= 0; --i) {
+    [x, y] = [y, x - y * (s[i].a / s[i].b)];
+  }
+  return ((y % m) + m) % m;
+}
 
 const millerTest = (d, n) => {
   [d, n] = [BigInt(d), BigInt(n)];
@@ -58,6 +86,45 @@ const checkPrime = (n) => {
   return true;
 };
 
+const gcd = (a, b) => {
+  [a, b] = [BigInt(a), BigInt(b)];
+  if (a === BigInt(0)) return b;
+  if (b === BigInt(0)) return a;
+  return gcd(b, a % b);
+};
+
+const encryptMessage = (message, e, n, phi) => {
+  [e, n] = [BigInt(e), BigInt(n)];
+
+  if (e <= BigInt(1) || e >= BigInt(phi)) return "";
+  if (n <= BigInt(127)) return "";
+
+  const cipher = [];
+
+  for (var i = 0; i < message.length; ++i) {
+    const character = BigInt(message.charCodeAt(i));
+    const encrypted = power(character, e, n);
+    cipher.push(encrypted.toString());
+  }
+  return String.fromCharCode(...cipher);
+};
+
+const decryptCipher = (cipher, d, n) => {
+  [d, n] = [BigInt(d), BigInt(n)];
+
+  if (d <= BigInt(0)) return "";
+  if (n <= BigInt(127)) return "";
+
+  const originalMessage = [];
+
+  for (var i = 0; i < cipher.length; ++i) {
+    const character = BigInt(cipher.charCodeAt(i));
+    const decrypted = power(character, d, n);
+    originalMessage.push(decrypted.toString());
+  }
+  return String.fromCharCode(...originalMessage);
+};
+
 const reducer = (state, action) => {
   console.log(action);
   console.log(state);
@@ -85,6 +152,56 @@ const reducer = (state, action) => {
         q: q.toString(),
         n: n.toString(),
         phi: phi.toString(),
+        errorbag: [],
+      };
+    }
+    case "SET_E": {
+      const e = BigInt(action.item.e);
+
+      if (e <= 1 || e >= BigInt(state.phi)) {
+        return {
+          ...state,
+          errorbag: [
+            { message: "e must be greater than 1 and less than phi." },
+          ],
+        };
+      }
+
+      if (gcd(e, state.phi) !== BigInt(1)) {
+        return {
+          ...state,
+          errorbag: [{ message: "The gcd of e and phi is not 1." }],
+        };
+      }
+
+      const d = BigInt(modInverse(e, state.phi));
+
+      return {
+        ...state,
+        e: e.toString(),
+        d: d.toString(),
+        errorbag: [],
+      };
+    }
+    case "Encrypt": {
+      const message = action.item.message;
+      const cipher = encryptMessage(message, state.e, state.n, state.phi);
+
+      console.log(cipher);
+
+      return {
+        ...state,
+        cipher,
+        errorbag: [],
+      };
+    }
+    case "Decrypt": {
+      const cipher = action.item.cipher;
+      const message = decryptCipher(cipher, state.d, state.n);
+
+      return {
+        ...state,
+        message,
         errorbag: [],
       };
     }

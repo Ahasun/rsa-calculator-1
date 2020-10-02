@@ -7,6 +7,7 @@ import "./Main.css";
 import PQForms from "./PQForms";
 import EForm from "./EForm";
 import { useStateValue } from "../../StateProvider";
+import EncryptOrDecrypt from "./EncryptOrDecrypt";
 
 function Main() {
   const [{ errorbag }] = useStateValue();
@@ -34,6 +35,7 @@ function Main() {
       <Container fixed>
         <PQForms />
         <EForm />
+        <EncryptOrDecrypt />
       </Container>
       <Snackbar open={hasError} onClose={handleSnackbarClose}>
         <Alert onClose={handleSnackbarClose} severity="error">
