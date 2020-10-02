@@ -5,9 +5,11 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { StateProvider } from "./StateProvider";
 import reducer, { initialState } from "./Reducer";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 ReactDOM.render(
   <React.StrictMode>
+    <CssBaseline />
     <StateProvider initialState={initialState} reducer={reducer}>
       <App />
     </StateProvider>

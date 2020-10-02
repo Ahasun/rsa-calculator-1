@@ -4,12 +4,12 @@ const randojs = require("@nastyox/rando.js");
 const rando = randojs.rando;
 
 export const initialState = {
-  p: BigInt(0),
-  q: BigInt(0),
-  n: BigInt(0),
-  phi: BigInt(0),
-  e: BigInt(0),
-  d: BigInt(0),
+  p: "0",
+  q: "0",
+  n: "0",
+  phi: "0",
+  e: "0",
+  d: "0",
   errorbag: [],
 };
 
@@ -60,6 +60,7 @@ const checkPrime = (n) => {
 
 const reducer = (state, action) => {
   console.log(action);
+  console.log(state);
   switch (action.type) {
     case "SET_P_AND_Q": {
       const p = BigInt(action.item.p);
@@ -67,15 +68,26 @@ const reducer = (state, action) => {
       if (!checkPrime(p) || !checkPrime(q)) {
         return {
           ...state,
-          errorbag: [
-            ...state.errorbag,
-            { message: "P and Q should be prime numbers." },
-          ],
+          errorbag: [{ message: "P and Q should be prime numbers." }],
+        };
+      }
+      if (p * q <= 256) {
+        return {
+          ...state,
+          errorbag: [{ message: "P * Q is less than 256." }],
         };
       }
       const n = p * q;
       const phi = (p - BigInt(1)) * (q - BigInt(1));
-      return { ...state, p, q, n, phi, errorbag: [] };
+      action.onSuccessCallback();
+      return {
+        ...state,
+        p: p.toString(),
+        q: q.toString(),
+        n: n.toString(),
+        phi: phi.toString(),
+        errorbag: [],
+      };
     }
     default:
       return state;

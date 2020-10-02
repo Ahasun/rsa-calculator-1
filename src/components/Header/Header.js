@@ -19,12 +19,12 @@ function Header() {
         }}
       >
         <div className="header__bannerText">
-          <Typography variant="h1" component="h2" gutterBottom>
+          <Typography variant="h2" component="h2" gutterBottom>
             RSA Calculator
           </Typography>
           <Typography variant="h4" gutterBottom>
             A program for calculating rsa algorithm and thus encrypting and
-            decrypting messages
+            decrypting the messages
           </Typography>
         </div>
       </Paper>
