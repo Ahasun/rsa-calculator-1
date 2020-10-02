@@ -11,15 +11,7 @@ import { useStateValue } from "../../StateProvider";
 function Main() {
   const [{ errorbag }] = useStateValue();
 
-  const [state, setState] = useState(1);
   const [hasError, setHasError] = useState(true);
-
-  const changeState = useCallback(
-    (x) => {
-      setState(x);
-    },
-    [setState]
-  );
 
   const handleSnackbarOpen = useCallback(() => {
     setHasError(true);
@@ -40,8 +32,8 @@ function Main() {
   return (
     <main className="main">
       <Container fixed>
-        <PQForms changeState={changeState} />
-        {state >= 2 && <EForm changeState={changeState} />}
+        <PQForms />
+        <EForm />
       </Container>
       <Snackbar open={hasError} onClose={handleSnackbarClose}>
         <Alert onClose={handleSnackbarClose} severity="error">

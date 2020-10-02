@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import "./PQForms.css";
 import { useStateValue } from "../../StateProvider";
 
-function PQForms({ changeState }) {
+function PQForms() {
   const [, dispatch] = useStateValue();
 
   const pValue = useRef();
@@ -25,17 +25,14 @@ function PQForms({ changeState }) {
         p: pValue.current.value,
         q: qValue.current.value,
       },
-      onSuccessCallback: () => {
-        changeState(2);
-      },
     });
-  }, [changeState, dispatch]);
+  }, [dispatch]);
 
   return (
     <Paper elevation={2} className="pqforms__container">
       <Typography variant="h5" gutterBottom>
         Enter two prime number <em>P</em> and <em>Q</em>, such that{" "}
-        <em>P * Q</em> is greater than 256.
+        <em>P * Q</em> is greater than 127.
       </Typography>
       <div className="pqforms__form">
         <Grid container spacing={3}>

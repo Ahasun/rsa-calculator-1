@@ -71,15 +71,14 @@ const reducer = (state, action) => {
           errorbag: [{ message: "P and Q should be prime numbers." }],
         };
       }
-      if (p * q <= 256) {
+      if (p * q <= 127) {
         return {
           ...state,
-          errorbag: [{ message: "P * Q is less than 256." }],
+          errorbag: [{ message: "P * Q is less than 127." }],
         };
       }
       const n = p * q;
       const phi = (p - BigInt(1)) * (q - BigInt(1));
-      action.onSuccessCallback();
       return {
         ...state,
         p: p.toString(),
