@@ -12,6 +12,8 @@ export const initialState = {
   d: "0",
   cipher: "",
   message: "",
+  cipherInNumeric: [],
+  messageInNumeric: [],
   errorbag: [],
 };
 
@@ -106,7 +108,7 @@ const encryptMessage = (message, e, n, phi) => {
     const encrypted = power(character, e, n);
     cipher.push(encrypted.toString());
   }
-  return String.fromCharCode(...cipher);
+  return cipher;
 };
 
 const decryptCipher = (cipher, d, n) => {
@@ -122,12 +124,26 @@ const decryptCipher = (cipher, d, n) => {
     const decrypted = power(character, d, n);
     originalMessage.push(decrypted.toString());
   }
-  return String.fromCharCode(...originalMessage);
+  return originalMessage;
+};
+
+const decryptCipherFromNumeric = (cipherAsNumeric, d, n) => {
+  [d, n] = [BigInt(d), BigInt(n)];
+
+  if (d <= BigInt(0)) return "";
+  if (n <= BigInt(127)) return "";
+
+  const originalMessage = [];
+
+  cipherAsNumeric.forEach((character) => {
+    const decrypted = power(character, d, n);
+    originalMessage.push(decrypted.toString());
+  });
+
+  return originalMessage;
 };
 
 const reducer = (state, action) => {
-  console.log(action);
-  console.log(state);
   switch (action.type) {
     case "SET_P_AND_Q": {
       const p = BigInt(action.item.p);
@@ -185,23 +201,49 @@ const reducer = (state, action) => {
     }
     case "Encrypt": {
       const message = action.item.message;
-      const cipher = encryptMessage(message, state.e, state.n, state.phi);
+      const cipherInNumeric = encryptMessage(
+        message,
+        state.e,
+        state.n,
+        state.phi
+      );
 
-      console.log(cipher);
+      const cipher = String.fromCharCode(...cipherInNumeric);
 
       return {
         ...state,
         cipher,
+        cipherInNumeric,
         errorbag: [],
       };
     }
     case "Decrypt": {
       const cipher = action.item.cipher;
-      const message = decryptCipher(cipher, state.d, state.n);
+      const messageInNumeric = decryptCipher(cipher, state.d, state.n);
+
+      const message = String.fromCharCode(...messageInNumeric);
 
       return {
         ...state,
         message,
+        messageInNumeric,
+        errorbag: [],
+      };
+    }
+    case "DecryptFromNumericCipher": {
+      const cipherAsNumeric = action.item.cipher.split(",");
+      const messageInNumeric = decryptCipherFromNumeric(
+        cipherAsNumeric,
+        state.d,
+        state.n
+      );
+
+      const message = String.fromCharCode(...messageInNumeric);
+
+      return {
+        ...state,
+        message,
+        messageInNumeric,
         errorbag: [],
       };
     }

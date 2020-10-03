@@ -10,10 +10,14 @@ import "./EncryptOrDecrypt.css";
 import { useStateValue } from "../../StateProvider";
 
 function EncryptOrDecrypt() {
-  const [{ d, e, n, cipher, message }, dispatch] = useStateValue();
+  const [
+    { d, e, n, cipher, message, cipherInNumeric, messageInNumeric },
+    dispatch,
+  ] = useStateValue();
 
   const messageInput = useRef();
   const cipherInput = useRef();
+  const cipherAsNumericInput = useRef();
 
   const encryptMessage = useCallback(() => {
     dispatch({
@@ -29,6 +33,15 @@ function EncryptOrDecrypt() {
       type: "Decrypt",
       item: {
         cipher: cipherInput.current.value,
+      },
+    });
+  }, [dispatch]);
+
+  const decryptCipherFromNumeric = useCallback(() => {
+    dispatch({
+      type: "DecryptFromNumericCipher",
+      item: {
+        cipher: cipherAsNumericInput.current.value,
       },
     });
   }, [dispatch]);
@@ -64,8 +77,6 @@ function EncryptOrDecrypt() {
               variant="outlined"
             >
               <TextField
-                id="outlined-p-value"
-                type="number"
                 inputRef={messageInput}
                 multiline={true}
                 rows={5}
@@ -76,11 +87,36 @@ function EncryptOrDecrypt() {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body1" gutterBottom>
-              {cipher}
-            </Typography>
+            <FormControl
+              fullWidth
+              className="encryptOrDecrypt__formControl"
+              variant="outlined"
+            >
+              <TextField
+                multiline={true}
+                rows={5}
+                rowsMax={5}
+                variant="outlined"
+                value={cipher}
+                label="Encrypted text in cipher"
+                aria-readonly
+              />
+            </FormControl>
           </Grid>
         </Grid>
+        <FormControl
+          fullWidth
+          style={{ marginTop: "16px" }}
+          className="encryptOrDecrypt__formControl"
+          variant="outlined"
+        >
+          <TextField
+            variant="outlined"
+            value={cipherInNumeric}
+            label="Encrypted text in numeric value"
+            aria-readonly
+          />
+        </FormControl>
       </div>
       <Button
         variant="contained"
@@ -94,6 +130,33 @@ function EncryptOrDecrypt() {
         Enter cipher text to decrypt the message
       </Typography>
       <div className="encryptOrDecrypt__form">
+        <Grid container spacing={3}>
+          <Grid item xs={9}>
+            <FormControl
+              fullWidth
+              style={{ marginBottom: "16px" }}
+              className="encryptOrDecrypt__formControl"
+              variant="outlined"
+            >
+              <TextField
+                variant="outlined"
+                label="Decrypt using numeric value"
+                inputRef={cipherAsNumericInput}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={3}>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className="encryptOrDecrypt__button"
+              onClick={decryptCipherFromNumeric}
+            >
+              Decrypt
+            </Button>
+          </Grid>
+        </Grid>
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <FormControl
@@ -114,11 +177,36 @@ function EncryptOrDecrypt() {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body1" gutterBottom>
-              {message}
-            </Typography>
+            <FormControl
+              fullWidth
+              className="encryptOrDecrypt__formControl"
+              variant="outlined"
+            >
+              <TextField
+                multiline={true}
+                rows={5}
+                rowsMax={5}
+                variant="outlined"
+                value={message}
+                label="Decrypted message"
+                aria-readonly
+              />
+            </FormControl>
           </Grid>
         </Grid>
+        <FormControl
+          fullWidth
+          style={{ marginTop: "16px" }}
+          className="encryptOrDecrypt__formControl"
+          variant="outlined"
+        >
+          <TextField
+            variant="outlined"
+            value={messageInNumeric}
+            label="Decrypted text in numeric value"
+            aria-readonly
+          />
+        </FormControl>
       </div>
       <Button
         variant="contained"
