@@ -9,6 +9,11 @@ import Button from "@material-ui/core/Button";
 import "./Navbar.css";
 
 function Navbar() {
+  const reload = () => {
+    window.location.reload();
+    return false;
+  };
+
   return (
     <div className="navbar">
       <AppBar position="static">
@@ -24,7 +29,9 @@ function Navbar() {
           <Typography variant="h6" className="navbar__title">
             RSA Calculator
           </Typography>
-          <Button color="inherit">Reset</Button>
+          <Button color="inherit" onClick={reload}>
+            Reset
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
